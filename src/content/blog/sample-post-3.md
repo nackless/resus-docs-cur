@@ -6,7 +6,7 @@ description: >-
   fostering healthy eating habits in children.
 pubDate: 2024-01-05T00:00:00.000Z
 author: Dr. A Paul
-image: /uploads/images/pediatric-nutrition.jpg
+image: ''
 tags:
   - pediatric nutrition
   - child health
@@ -33,8 +33,6 @@ Nutrition plays a critical role in:
 ### Establishing Healthy Habits
 
 The eating patterns established in childhood often persist into adulthood, making early nutrition education crucial for long-term health.
-
-![](/uploads/2021-04-07%2013.23.45.jpg)
 
 ## Age-Appropriate Nutritional Guidelines
 
