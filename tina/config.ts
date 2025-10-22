@@ -14,12 +14,11 @@ export default defineConfig({
   build: {
     outputFolder: 'admin',
     publicFolder: 'public',
-    basePath: '/admin',
   },
   media: {
-    loadCustomStore: async () => {
-      const { CloudinaryMediaStore } = await import('../src/lib/cloudinary-media-store')
-      return CloudinaryMediaStore
+    tina: {
+      mediaRoot: 'uploads',
+      publicFolder: 'public',
     },
   },
   schema: {

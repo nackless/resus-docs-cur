@@ -23,28 +23,11 @@ const {
   sizes = '100vw'
 } = Astro.props
 
-// Generate Cloudinary URL
-function getCloudinaryUrl(publicId: string, options: any) {
-  const cloudName = import.meta.env.CLOUDINARY_CLOUD_NAME || 'your-cloud-name'
-  let url = `https://res.cloudinary.com/${cloudName}/image/upload`
-  
-  const transformations = []
-  if (options.width) transformations.push(`w_${options.width}`)
-  if (options.height) transformations.push(`h_${options.height}`)
-  if (options.crop) transformations.push(`c_${options.crop}`)
-  if (options.quality) transformations.push(`q_${options.quality}`)
-  if (options.format) transformations.push(`f_${options.format}`)
-  
-  if (transformations.length > 0) {
-    url += `/${transformations.join(',')}`
-  }
-  
-  url += `/${publicId}`
-  return url
-}
+// Import utility functions
+const { getCloudinaryUrl } = await import('../lib/cloudinary-utils')
 
 // Generate responsive image URLs
-const baseUrl = getCloudinaryUrl(publicId, { crop, quality, format })
+const baseUrl = getCloudinaryUrl(publicId, { width, height, crop, quality, format })
 const mobileUrl = getCloudinaryUrl(publicId, { width: 400, crop, quality, format })
 const tabletUrl = getCloudinaryUrl(publicId, { width: 800, crop, quality, format })
 const desktopUrl = getCloudinaryUrl(publicId, { width: 1200, crop, quality, format })
