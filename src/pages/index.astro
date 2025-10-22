@@ -1,16 +1,359 @@
----
 
 ---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BlogCard from '../components/BlogCard.astro';
+import Newsletter from '../components/Newsletter.astro';
+import { getCollection } from 'astro:content';
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+// Get the 3 most recent blog posts
+const allPosts = await getCollection('blog');
+const recentPosts = allPosts
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
+---
+
+<BaseLayout title="Home - Your Trusted Medical Information Source">
+  <div class="homepage">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-content">
+          <h1>Your Trusted Source for Medical Information</h1>
+          <p class="hero-subtitle">
+            Evidence-based health insights and medical knowledge to help you make 
+            informed decisions about your wellbeing.
+          </p>
+          <div class="hero-cta">
+            <a href="/blog" class="btn btn-primary">Explore Articles</a>
+            <a href="/about" class="btn btn-secondary">About Us</a>
+          </div>
+        </div>
+        <div class="hero-image">
+          <svg viewBox="0 0 400 300" fill="none">
+            <rect width="400" height="300" fill="#eff6ff"/>
+            <circle cx="200" cy="150" r="80" fill="#2563eb" opacity="0.1"/>
+            <circle cx="200" cy="150" r="60" fill="#2563eb" opacity="0.2"/>
+            <path d="M200 110v80M160 150h80" stroke="#2563eb" stroke-width="6" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features">
+      <div class="container">
+        <h2 class="section-title">Why Trust MedBlog?</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <circle cx="24" cy="24" r="24" fill="#dbeafe"/>
+                <path d="M24 14v20M14 24h20" stroke="#2563eb" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Evidence-Based</h3>
+            <p>All content is backed by scientific research and medical studies.</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <circle cx="24" cy="24" r="24" fill="#dbeafe"/>
+                <path d="M16 24l6 6 12-12" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3>Expert Review</h3>
+            <p>Written and reviewed by qualified healthcare professionals.</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+                <circle cx="24" cy="24" r="24" fill="#dbeafe"/>
+                <circle cx="24" cy="24" r="8" stroke="#2563eb" stroke-width="3"/>
+                <circle cx="24" cy="24" r="14" stroke="#2563eb" stroke-width="2" opacity="0.5"/>
+              </svg>
+            </div>
+            <h3>Up-to-Date</h3>
+            <p>Regularly updated with the latest medical findings and guidelines.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Recent Posts Section -->
+    <section class="recent-posts">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Latest Articles</h2>
+          <a href="/blog" class="view-all">View all articles →</a>
+        </div>
+        
+        <div class="posts-grid">
+          {recentPosts.map(post => (
+            <BlogCard
+              slug={post.slug}
+              title={post.data.title}
+              description={post.data.description}
+              pubDate={post.data.pubDate}
+              category={post.data.category}
+              image={post.data.image}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-content">
+          <h2>Stay Informed About Your Health</h2>
+          <p>Subscribe to receive the latest medical insights and health tips directly to your inbox.</p>
+          <div class="cta-newsletter">
+            <Newsletter />
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  /* Hero Section */
+  .hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 5rem 0;
+  }
+  
+  .hero .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+  }
+  
+  .hero-content h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    opacity: 0.95;
+    margin-bottom: 2rem;
+  }
+  
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .btn {
+    padding: 0.875rem 2rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: inline-block;
+  }
+  
+  .btn-primary {
+    background: white;
+    color: #667eea;
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+  
+  .btn-secondary {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    border: 2px solid white;
+  }
+  
+  .btn-secondary:hover {
+    background: rgba(255,255,255,0.3);
+    transform: translateY(-2px);
+  }
+  
+  .hero-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .hero-image svg {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  /* Features Section */
+  .features {
+    padding: 5rem 0;
+    background: white;
+  }
+  
+  .section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 3rem;
+  }
+  
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2.5rem;
+  }
+  
+  .feature-card {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .feature-icon {
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .feature-card h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+  }
+  
+  .feature-card p {
+    color: #666;
+    line-height: 1.6;
+  }
+  
+  /* Recent Posts Section */
+  .recent-posts {
+    padding: 5rem 0;
+    background: #f9fafb;
+  }
+  
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 3rem;
+  }
+  
+  .view-all {
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  
+  .view-all:hover {
+    text-decoration: underline;
+  }
+  
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2rem;
+  }
+  
+  /* CTA Section */
+  .cta-section {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+  }
+  
+  .cta-content {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .cta-content h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  
+  .cta-content p {
+    font-size: 1.25rem;
+    opacity: 0.95;
+    margin-bottom: 2rem;
+  }
+  
+  .cta-newsletter {
+    max-width: 500px;
+    margin: 0 auto;
+  }
+  
+  @media (max-width: 768px) {
+    .hero .container {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    
+    .hero {
+      padding: 3rem 0;
+    }
+    
+    .hero-content h1 {
+      font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1.125rem;
+    }
+    
+    .hero-cta {
+      flex-direction: column;
+    }
+    
+    .btn {
+      text-align: center;
+    }
+    
+    .hero-image {
+      order: -1;
+    }
+    
+    .section-title {
+      font-size: 2rem;
+    }
+    
+    .features,
+    .recent-posts,
+    .cta-section {
+      padding: 3rem 0;
+    }
+    
+    .section-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .cta-content h2 {
+      font-size: 1.75rem;
+    }
+  }
+</style>

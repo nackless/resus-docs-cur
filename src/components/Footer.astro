@@ -1,0 +1,176 @@
+---
+import Newsletter from './Newsletter.astro';
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-section">
+        <div class="footer-logo">
+          <svg width="32" height="32" viewBox="0 0 32 32">
+            <rect fill="#2563eb" width="32" height="32" rx="6"/>
+            <path d="M16 8v16M8 16h16" stroke="white" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+          <span>MedBlog</span>
+        </div>
+        <p class="footer-description">
+          Your trusted source for medical information and health insights. 
+          Evidence-based content for better health decisions.
+        </p>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog">Blog</a></li>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="/contact">Contact</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Categories</h3>
+        <ul>
+          <li><a href="/blog">Cardiology</a></li>
+          <li><a href="/blog">Mental Health</a></li>
+          <li><a href="/blog">Nutrition</a></li>
+          <li><a href="/blog">General Health</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h3>Stay Updated</h3>
+        <p>Subscribe to our newsletter for the latest health insights.</p>
+        <Newsletter />
+      </div>
+    </div>
+    
+    <div class="footer-bottom">
+      <p>&copy; {currentYear} MedBlog. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="/privacy">Privacy Policy</a>
+        <span>•</span>
+        <a href="/terms">Terms of Service</a>
+        <span>•</span>
+        <a href="/disclaimer">Medical Disclaimer</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<style>
+  footer {
+    background: #1f2937;
+    color: #e5e7eb;
+    padding: 3rem 0 1.5rem;
+    margin-top: 4rem;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 3rem;
+    margin-bottom: 3rem;
+  }
+  
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+  }
+  
+  .footer-description {
+    color: #9ca3af;
+    line-height: 1.6;
+    font-size: 0.925rem;
+  }
+  
+  .footer-section h3 {
+    color: white;
+    font-size: 1.125rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+  
+  .footer-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footer-section li {
+    margin-bottom: 0.75rem;
+  }
+  
+  .footer-section a {
+    color: #9ca3af;
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  
+  .footer-section a:hover {
+    color: #60a5fa;
+    text-decoration: none;
+  }
+  
+  .footer-section p {
+    color: #9ca3af;
+    font-size: 0.925rem;
+    margin-bottom: 1rem;
+  }
+  
+  .footer-bottom {
+    border-top: 1px solid #374151;
+    padding-top: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+  
+  .footer-bottom p {
+    color: #9ca3af;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+  
+  .footer-links {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    font-size: 0.875rem;
+  }
+  
+  .footer-links span {
+    color: #4b5563;
+  }
+  
+  @media (max-width: 768px) {
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    
+    .footer-bottom {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .container {
+      padding: 0 1.5rem;
+    }
+  }
+</style>

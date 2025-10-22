@@ -1,0 +1,200 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+// Get unique categories
+const categories = [...new Set(allPosts.map(post => post.data.category))];
+---
+
+<BaseLayout title="Blog - Medical Articles & Health Insights" description="Browse our collection of evidence-based medical articles and health insights.">
+  <div class="blog-page">
+    <div class="blog-header">
+      <div class="container">
+        <h1>Medical Blog</h1>
+        <p>Evidence-based health information and medical insights from healthcare professionals</p>
+      </div>
+    </div>
+    
+    <div class="blog-content">
+      <div class="container">
+        <!-- Category Filter -->
+        <div class="category-filter">
+          <h2>Categories</h2>
+          <div class="category-pills">
+            <button class="category-pill active" data-category="all">All Articles</button>
+            {categories.map(category => (
+              <button class="category-pill" data-category={category}>
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
+        
+        <!-- Blog Posts Grid -->
+        <div class="posts-grid" id="posts-grid">
+          {sortedPosts.map(post => (
+            <div class="post-item" data-category={post.data.category}>
+              <BlogCard
+                slug={post.slug}
+                title={post.data.title}
+                description={post.data.description}
+                pubDate={post.data.pubDate}
+                category={post.data.category}
+                image={post.data.image}
+              />
+            </div>
+          ))}
+        </div>
+        
+        {sortedPosts.length === 0 && (
+          <div class="no-posts">
+            <p>No articles found. Check back soon for new content!</p>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  .blog-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+  }
+  
+  .blog-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  
+  .blog-header p {
+    font-size: 1.25rem;
+    opacity: 0.95;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .blog-content {
+    padding: 3rem 0;
+  }
+  
+  .category-filter {
+    margin-bottom: 3rem;
+  }
+  
+  .category-filter h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 1rem;
+  }
+  
+  .category-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  
+  .category-pill {
+    padding: 0.625rem 1.25rem;
+    background: white;
+    border: 2px solid #e5e7eb;
+    border-radius: 24px;
+    font-weight: 500;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-transform: capitalize;
+  }
+  
+  .category-pill:hover {
+    border-color: #2563eb;
+    color: #2563eb;
+  }
+  
+  .category-pill.active {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: white;
+  }
+  
+  .posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2rem;
+  }
+  
+  .post-item {
+    transition: opacity 0.3s;
+  }
+  
+  .post-item.hidden {
+    display: none;
+  }
+  
+  .no-posts {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+    font-size: 1.125rem;
+  }
+  
+  @media (max-width: 768px) {
+    .blog-header {
+      padding: 3rem 0;
+    }
+    
+    .blog-header h1 {
+      font-size: 2rem;
+    }
+    
+    .blog-header p {
+      font-size: 1.125rem;
+    }
+    
+    .posts-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  // Category filtering
+  const pills = document.querySelectorAll('.category-pill');
+  const posts = document.querySelectorAll('.post-item');
+  
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const category = pill.getAttribute('data-category');
+      
+      // Update active state
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      
+      // Filter posts
+      posts.forEach(post => {
+        const postCategory = post.getAttribute('data-category');
+        if (category === 'all' || postCategory === category) {
+          post.classList.remove('hidden');
+        } else {
+          post.classList.add('hidden');
+        }
+      });
+    });
+  });
+</script>

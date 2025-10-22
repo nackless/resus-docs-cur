@@ -1,0 +1,129 @@
+---
+const currentPath = Astro.url.pathname;
+---
+
+<header>
+  <nav>
+    <div class="container">
+      <a href="/" class="logo">
+        <svg width="36" height="36" viewBox="0 0 36 36">
+          <rect fill="#2563eb" width="36" height="36" rx="8"/>
+          <path d="M18 10v16M10 18h16" stroke="white" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <span>MedBlog</span>
+      </a>
+      
+      <button class="mobile-menu-toggle" aria-label="Toggle menu">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 12h18M3 6h18M3 18h18"/>
+        </svg>
+      </button>
+      
+      <ul class="nav-links">
+        <li><a href="/" class={currentPath === '/' ? 'active' : ''}>Home</a></li>
+        <li><a href="/blog" class={currentPath.startsWith('/blog') ? 'active' : ''}>Blog</a></li>
+        <li><a href="/about" class={currentPath === '/about' ? 'active' : ''}>About</a></li>
+        <li><a href="/contact" class={currentPath === '/contact' ? 'active' : ''}>Contact</a></li>
+      </ul>
+    </div>
+  </nav>
+</header>
+
+<style>
+  header {
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2563eb;
+    text-decoration: none;
+  }
+  
+  .logo:hover {
+    text-decoration: none;
+  }
+  
+  .mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    color: #333;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+    align-items: center;
+  }
+  
+  .nav-links a {
+    color: #555;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+    position: relative;
+  }
+  
+  .nav-links a:hover {
+    color: #2563eb;
+    text-decoration: none;
+  }
+  
+  .nav-links a.active {
+    color: #2563eb;
+  }
+  
+  .nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: #2563eb;
+  }
+  
+  @media (max-width: 768px) {
+    .mobile-menu-toggle {
+      display: block;
+    }
+    
+    .nav-links {
+      display: none;
+    }
+    
+    .container {
+      padding: 1rem 1.5rem;
+    }
+  }
+</style>
+
+<script>
+  const toggle = document.querySelector('.mobile-menu-toggle');
+  const navLinks = document.querySelector('.nav-links');
+  
+  toggle?.addEventListener('click', () => {
+    navLinks?.classList.toggle('mobile-open');
+  });
+</script>

@@ -1,0 +1,112 @@
+---
+
+// Newsletter subscription component
+
+---
+
+<div class="newsletter-form">
+  <form id="newsletter-form">
+    <input 
+      type="email" 
+      placeholder="Enter your email" 
+      required
+      aria-label="Email address"
+    />
+    <button type="submit">Subscribe</button>
+  </form>
+  <p class="newsletter-message"></p>
+</div>
+
+<style>
+  .newsletter-form form {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .newsletter-form input {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    border: 1px solid #374151;
+    border-radius: 6px;
+    background: #374151;
+    color: white;
+    font-size: 0.925rem;
+  }
+  
+  .newsletter-form input::placeholder {
+    color: #9ca3af;
+  }
+  
+  .newsletter-form input:focus {
+    outline: none;
+    border-color: #2563eb;
+    background: #4b5563;
+  }
+  
+  .newsletter-form button {
+    padding: 0.75rem 1.5rem;
+    background: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  
+  .newsletter-form button:hover {
+    background: #1d4ed8;
+  }
+  
+  .newsletter-message {
+    font-size: 0.875rem;
+    margin-top: 0.5rem;
+    min-height: 1.25rem;
+  }
+  
+  .newsletter-message.success {
+    color: #10b981;
+  }
+  
+  .newsletter-message.error {
+    color: #ef4444;
+  }
+  
+  @media (max-width: 480px) {
+    .newsletter-form form {
+      flex-direction: column;
+    }
+    
+    .newsletter-form button {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  const form = document.getElementById('newsletter-form') as HTMLFormElement;
+  const message = document.querySelector('.newsletter-message') as HTMLElement;
+  
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const input = form.querySelector('input') as HTMLInputElement;
+    const email = input.value;
+    
+    // Simulate API call (replace with your actual newsletter service)
+    message.textContent = 'Subscribing...';
+    message.className = 'newsletter-message';
+    
+    setTimeout(() => {
+      message.textContent = `✓ Successfully subscribed with ${email}`;
+      message.className = 'newsletter-message success';
+      input.value = '';
+      
+      setTimeout(() => {
+        message.textContent = '';
+      }, 5000);
+    }, 1000);
+  });
+</script>

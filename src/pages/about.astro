@@ -1,0 +1,178 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="About Us" description="Learn about MedBlog's mission to provide trustworthy medical information.">
+  <div class="about-page">
+    <div class="about-header">
+      <div class="container">
+        <h1>About MedBlog</h1>
+        <p>Committed to providing accurate, evidence-based health information</p>
+      </div>
+    </div>
+    
+    <div class="about-content">
+      <div class="container">
+        <section class="mission-section">
+          <h2>Our Mission</h2>
+          <p>
+            At MedBlog, we believe everyone deserves access to reliable, evidence-based medical 
+            information. Our mission is to bridge the gap between complex medical research and 
+            everyday health decisions, empowering individuals to take control of their wellbeing.
+          </p>
+        </section>
+        
+        <section class="values-section">
+          <h2>Our Values</h2>
+          <div class="values-grid">
+            <div class="value-card">
+              <h3>🎯 Accuracy</h3>
+              <p>All content is thoroughly researched and fact-checked against current medical literature.</p>
+            </div>
+            <div class="value-card">
+              <h3>🤝 Trustworthiness</h3>
+              <p>We cite our sources and are transparent about the evidence behind our content.</p>
+            </div>
+            <div class="value-card">
+              <h3>💡 Clarity</h3>
+              <p>We translate complex medical concepts into clear, understandable language.</p>
+            </div>
+            <div class="value-card">
+              <h3>🔄 Currency</h3>
+              <p>Our content is regularly updated to reflect the latest medical guidelines.</p>
+            </div>
+          </div>
+        </section>
+        
+        <section class="team-section">
+          <h2>Our Team</h2>
+          <p>
+            Our content is created and reviewed by qualified healthcare professionals including 
+            physicians, nurses, and medical researchers. Every article undergoes a rigorous 
+            review process to ensure accuracy and reliability.
+          </p>
+        </section>
+        
+        <section class="disclaimer-section">
+          <h2>Important Notice</h2>
+          <div class="disclaimer-box">
+            <p>
+              <strong>Medical Disclaimer:</strong> The information provided on MedBlog is for 
+              educational and informational purposes only. It is not intended to be a substitute 
+              for professional medical advice, diagnosis, or treatment. Always seek the advice of 
+              your physician or other qualified health provider with any questions you may have 
+              regarding a medical condition.
+            </p>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+  
+  .about-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+  }
+  
+  .about-header h1 {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+  }
+  
+  .about-header p {
+    font-size: 1.25rem;
+    opacity: 0.95;
+  }
+  
+  .about-content {
+    padding: 4rem 0;
+  }
+  
+  section {
+    margin-bottom: 4rem;
+  }
+  
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 1.5rem;
+  }
+  
+  p {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: #555;
+  }
+  
+  .values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+  }
+  
+  .value-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  }
+  
+  .value-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 0.75rem;
+  }
+  
+  .value-card p {
+    font-size: 1rem;
+    color: #666;
+  }
+  
+  .disclaimer-box {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 2rem;
+    border-radius: 8px;
+  }
+  
+  .disclaimer-box p {
+    margin: 0;
+    font-size: 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    .about-header {
+      padding: 3rem 0;
+    }
+    
+    .about-header h1 {
+      font-size: 2rem;
+    }
+    
+    .about-content {
+      padding: 3rem 0;
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+    }
+    
+    .values-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
