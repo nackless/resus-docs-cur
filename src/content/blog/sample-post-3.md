@@ -6,11 +6,7 @@ description: >-
   fostering healthy eating habits in children.
 pubDate: 2024-01-05T00:00:00.000Z
 author: Dr. A Paul
-<<<<<<< HEAD
 image: /images/pediatric-nutrition.jpg
-=======
-image: ''
->>>>>>> a58395b7b15e709eb4fde6561ef7f6f02881365e
 tags:
   - pediatric nutrition
   - child health
