@@ -16,10 +16,10 @@ export default defineConfig({
     publicFolder: 'public',
   },
   media: {
-    tina: {
-      mediaRoot: 'uploads',
-      publicFolder: 'public',
-    },
+    // Return the CloudinaryMediaStore class so the admin can instantiate it.
+    // Returning the class (wrapped in a Promise) satisfies the Tina admin loader
+    // which will `new` the class when it finds a `.prototype.persist` implementation.
+    loadCustomStore: () => Promise.resolve(CloudinaryMediaStore),
   },
   schema: {
     collections: [

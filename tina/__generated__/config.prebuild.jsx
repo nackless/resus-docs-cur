@@ -9,6 +9,55 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
+var CloudinaryMediaStore = class {
+  async persist(files) {
+    const uploadedFiles = await Promise.all(
+      files.map(async (file) => {
+        try {
+          const result = await cloudinary.uploader.upload(file.directory + "/" + file.filename, {
+            public_id: file.filename.split(".")[0],
+            folder: "resus-docs",
+            resource_type: "auto"
+          });
+          return {
+            ...file,
+            directory: result.public_id,
+            filename: result.public_id + "." + result.format,
+            id: result.public_id
+          };
+        } catch (error) {
+          console.error("Cloudinary upload error:", error);
+          throw error;
+        }
+      })
+    );
+    return uploadedFiles;
+  }
+  async delete(media) {
+    try {
+      await cloudinary.uploader.destroy(media.id);
+    } catch (error) {
+      console.error("Cloudinary delete error:", error);
+      throw error;
+    }
+  }
+  async list() {
+    try {
+      const result = await cloudinary.search.expression("folder:resus-docs").sort_by([["created_at", "desc"]]).max_results(500).execute();
+      return result.resources.map((resource) => ({
+        id: resource.public_id,
+        filename: resource.public_id + "." + resource.format,
+        directory: resource.public_id,
+        type: resource.resource_type,
+        size: resource.bytes,
+        url: resource.secure_url
+      }));
+    } catch (error) {
+      console.error("Cloudinary list error:", error);
+      return [];
+    }
+  }
+};
 
 // tina/config.ts
 var branch = process.env.HEAD || process.env.VERCEL_GIT_COMMIT_REF || "main";
@@ -22,10 +71,10 @@ var config_default = defineConfig({
     publicFolder: "public"
   },
   media: {
-    tina: {
-      mediaRoot: "uploads",
-      publicFolder: "public"
-    }
+    // Return the CloudinaryMediaStore class so the admin can instantiate it.
+    // Returning the class (wrapped in a Promise) satisfies the Tina admin loader
+    // which will `new` the class when it finds a `.prototype.persist` implementation.
+    loadCustomStore: () => Promise.resolve(CloudinaryMediaStore)
   },
   schema: {
     collections: [
