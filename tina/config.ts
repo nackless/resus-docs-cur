@@ -1,4 +1,5 @@
 import { defineConfig } from 'tinacms'
+import { CloudinaryMediaStore } from '../src/lib/cloudinary-media-store'
 
 // Your hosting provider likely supplies these as env variables
 const branch = process.env.HEAD || process.env.VERCEL_GIT_COMMIT_REF || 'main'
@@ -16,9 +17,9 @@ export default defineConfig({
     basePath: '/admin',
   },
   media: {
-    tina: {
-      mediaRoot: 'uploads',
-      publicFolder: 'public',
+    loadCustomStore: async () => {
+      const { CloudinaryMediaStore } = await import('../src/lib/cloudinary-media-store')
+      return CloudinaryMediaStore
     },
   },
   schema: {

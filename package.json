@@ -11,8 +11,9 @@
     "tina-build": "tinacms build && npm run build"
   },
   "dependencies": {
+    "@tinacms/cli": "^1.5.0",
     "astro": "^5.14.8",
-    "tinacms": "^1.5.0",
-    "@tinacms/cli": "^1.5.0"
+    "cloudinary": "^2.8.0",
+    "tinacms": "^1.5.0"
   }
 }

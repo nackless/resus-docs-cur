@@ -1,0 +1,98 @@
+---
+// Example of how to use Cloudinary images with different sizes
+import CloudinaryImage from './CloudinaryImage.astro'
+
+// Example: Different image sizes for different use cases
+const heroImage = 'resus-docs/hero-image' // Replace with your actual Cloudinary public ID
+const thumbnailImage = 'resus-docs/thumbnail-image'
+---
+
+<div class="image-examples">
+  <h2>Responsive Image Examples</h2>
+  
+  <!-- Hero Image - Large -->
+  <div class="hero-section">
+    <h3>Hero Image (1200px wide)</h3>
+    <CloudinaryImage
+      publicId={heroImage}
+      alt="Hero image for medical blog"
+      width={1200}
+      height={600}
+      crop="fill"
+      quality="auto"
+      format="webp"
+      className="hero-image"
+      sizes="100vw"
+    />
+  </div>
+  
+  <!-- Thumbnail - Small -->
+  <div class="thumbnail-section">
+    <h3>Thumbnail (300px wide)</h3>
+    <CloudinaryImage
+      publicId={thumbnailImage}
+      alt="Thumbnail image"
+      width={300}
+      height={200}
+      crop="fill"
+      quality="auto"
+      format="webp"
+      className="thumbnail-image"
+      sizes="(max-width: 768px) 100vw, 300px"
+    />
+  </div>
+  
+  <!-- Square Crop -->
+  <div class="square-section">
+    <h3>Square Crop (400x400)</h3>
+    <CloudinaryImage
+      publicId={heroImage}
+      alt="Square cropped image"
+      width={400}
+      height={400}
+      crop="fill"
+      quality="auto"
+      format="webp"
+      className="square-image"
+      sizes="400px"
+    />
+  </div>
+</div>
+
+<style>
+  .image-examples {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .hero-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .thumbnail-image {
+    width: 300px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+  
+  .square-image {
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+  }
+  
+  .hero-section,
+  .thumbnail-section,
+  .square-section {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+  }
+</style>
