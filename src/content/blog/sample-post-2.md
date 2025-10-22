@@ -2,7 +2,7 @@
 title: "The Importance of Mental Health in Medical Practice"
 description: "Exploring the critical role of mental health awareness in healthcare, its impact on patient outcomes, and strategies for healthcare providers to better support their patients."
 pubDate: 2024-01-10T00:00:00.000Z
-author: "Dr. Michael Chen"
+author: "Dr. A Paul"
 image: "/images/mental-health.jpg"
 tags: ["mental health", "healthcare", "patient care", "wellness"]
 category: "mental-health"

@@ -1,0 +1,11 @@
+fragment BlogParts on Blog {
+  __typename
+  title
+  description
+  pubDate
+  author
+  image
+  tags
+  category
+  body
+}

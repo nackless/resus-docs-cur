@@ -2,7 +2,7 @@
 title: "Pediatric Nutrition: Building Healthy Eating Habits from an Early Age"
 description: "Essential guidelines for pediatric nutrition, including age-appropriate dietary recommendations, common nutritional challenges, and strategies for fostering healthy eating habits in children."
 pubDate: 2024-01-05T00:00:00.000Z
-author: "Dr. Emily Rodriguez"
+author: "Dr. A Paul"
 image: "/images/pediatric-nutrition.jpg"
 tags: ["pediatric nutrition", "child health", "healthy eating", "development"]
 category: "pediatrics"

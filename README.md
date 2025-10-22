@@ -1,43 +1,167 @@
-# Astro Starter Kit: Minimal
+# Resus Docs - Medical Blog with TinaCMS
 
-```sh
-npm create astro@latest -- --template minimal
+A modern medical blog built with Astro and TinaCMS for easy content management and mobile publishing.
+
+## 🚀 Features
+
+- **Astro Framework** - Fast, modern static site generation
+- **TinaCMS** - Visual content editing with mobile support
+- **Medical Content** - Specialized for healthcare professionals
+- **Responsive Design** - Works perfectly on all devices
+- **SEO Optimized** - Built for search engine visibility
+
+## 📱 Mobile Publishing
+
+TinaCMS provides excellent mobile editing capabilities:
+- Touch-friendly interface
+- Real-time preview
+- Offline editing support
+- Progressive Web App features
+
+## 🛠️ Development Setup
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### Installation
+
+1. **Clone and install dependencies:**
+   ```bash
+   git clone <your-repo>
+   cd resus-docs
+   npm install
+   ```
+
+2. **Set up TinaCMS:**
+   ```bash
+   # Copy environment variables
+   cp .env.example .env.local
+   
+   # Edit .env.local with your TinaCMS credentials
+   ```
+
+3. **Run development server:**
+   ```bash
+   # Start TinaCMS with Astro
+   npm run tina-dev
+   
+   # Or just Astro
+   npm run dev
+   ```
+
+4. **Access the admin panel:**
+   - Visit `http://localhost:4321/admin` for TinaCMS editor
+   - Visit `http://localhost:4321` for your blog
+
+## 📝 Content Management
+
+### Blog Posts
+- **Title** - Post title
+- **Description** - SEO description
+- **Author** - Post author
+- **Category** - Medical specialty
+- **Tags** - Searchable tags
+- **Featured Image** - Hero image
+- **Content** - Rich text editor with markdown support
+
+### Categories
+- Cardiology
+- Neurology
+- Pediatrics
+- General Medicine
+- Nutrition
+- Mental Health
+- Oncology
+
+## 🌐 Deployment to Netlify
+
+### Automatic Deployment
+
+1. **Connect to Netlify:**
+   - Push your code to GitHub
+   - Connect your repo to Netlify
+   - Netlify will auto-deploy on every push
+
+2. **Set Environment Variables in Netlify:**
+   ```
+   TINA_PUBLIC_TINA_CLIENT_ID = your-client-id
+   TINA_TOKEN = your-token
+   ```
+
+3. **Build Settings:**
+   - Build Command: `npm run tina-build`
+   - Publish Directory: `dist`
+
+### Manual Deployment
+
+```bash
+# Build for production
+npm run tina-build
+
+# Deploy to Netlify
+npx netlify deploy --prod --dir=dist
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## 📁 Project Structure
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
+```
+resus-docs/
 ├── src/
-│   └── pages/
-│       └── index.astro
+│   ├── components/     # Astro components
+│   ├── layouts/        # Page layouts
+│   ├── pages/          # Astro pages
+│   └── content/
+│       └── blog/       # Markdown blog posts
+├── tina/
+│   └── config.ts       # TinaCMS configuration
+├── public/             # Static assets
+├── netlify.toml        # Netlify configuration
 └── package.json
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 🔧 TinaCMS Configuration
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+The TinaCMS configuration is in `tina/config.ts` and includes:
+- Blog post schema
+- Media management
+- Content validation
+- Mobile-optimized editing
 
-Any static assets, like images, can be placed in the `public/` directory.
+## 📱 Mobile Editing
 
-## 🧞 Commands
+TinaCMS provides:
+- **Responsive Editor** - Works on all screen sizes
+- **Touch Interface** - Optimized for mobile devices
+- **Real-time Preview** - See changes instantly
+- **Offline Support** - Edit without internet connection
 
-All commands are run from the root of the project, from a terminal:
+## 🎨 Customization
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+### Styling
+- Edit CSS in component files
+- Global styles in `src/layouts/BaseLayout.astro`
+- Responsive design included
 
-## 👀 Want to learn more?
+### Content Types
+- Modify `tina/config.ts` to add new content types
+- Add new fields to existing collections
+- Customize the editing interface
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## 🚀 Performance
+
+- **Astro** - Zero JavaScript by default
+- **Static Generation** - Pre-built pages for speed
+- **Image Optimization** - Automatic image processing
+- **CDN Ready** - Works with any CDN
+
+## 📞 Support
+
+For issues with:
+- **Astro**: [Astro Documentation](https://docs.astro.build)
+- **TinaCMS**: [TinaCMS Documentation](https://tina.io/docs)
+- **Netlify**: [Netlify Documentation](https://docs.netlify.com)
+
+## 📄 License
+
+MIT License - feel free to use this template for your medical blog!

@@ -1,0 +1,23 @@
+# Netlify Build Configuration
+[build]
+  command = "npm run tina-build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+# TinaCMS Environment Variables (set these in Netlify dashboard)
+# TINA_PUBLIC_TINA_CLIENT_ID = "your-client-id"
+# TINA_TOKEN = "your-token"
+
+# Redirects for TinaCMS admin
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200
+
+# Redirect for TinaCMS GraphQL
+[[redirects]]
+  from = "/graphql"
+  to = "/admin/index.html"
+  status = 200

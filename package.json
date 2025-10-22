@@ -1,14 +1,18 @@
 {
   "name": "resus-docs",
-  "type": "module",
   "version": "0.0.1",
+  "type": "module",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "tina-dev": "tinacms dev -c \"npm run dev\"",
+    "tina-build": "tinacms build && npm run build"
   },
   "dependencies": {
-    "astro": "^5.14.8"
+    "astro": "^5.14.8",
+    "tinacms": "^1.5.0",
+    "@tinacms/cli": "^1.5.0"
   }
 }

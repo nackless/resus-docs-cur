@@ -2,7 +2,7 @@
 title: "Understanding Heart Disease: A Comprehensive Guide"
 description: "Learn about the different types of heart disease, their causes, symptoms, and prevention strategies to maintain optimal cardiovascular health."
 pubDate: 2024-01-15T00:00:00.000Z
-author: "Dr. Sarah Johnson"
+author: "Dr. A Paul"
 image: "/images/heart-health.jpg"
 tags: ["heart disease", "cardiovascular health", "prevention", "symptoms"]
 category: "cardiology"
