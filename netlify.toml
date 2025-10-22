@@ -10,9 +10,9 @@
 # TINA_PUBLIC_TINA_CLIENT_ID = "your-client-id"
 # TINA_TOKEN = "your-token"
 
-# Redirects for TinaCMS admin
+# Redirects for TinaCMS admin - only redirect if file doesn't exist
 [[redirects]]
-  from = "/admin/*"
+  from = "/admin"
   to = "/admin/index.html"
   status = 200
 
