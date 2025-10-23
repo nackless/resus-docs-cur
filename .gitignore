@@ -22,9 +22,5 @@ dist/
 .DS_Store
 Thumbs.db
 
-# TinaCMS
-.tina/
-admin/
-
 # Logs
 *.log

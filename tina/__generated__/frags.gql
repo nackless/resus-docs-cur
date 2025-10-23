@@ -1,8 +1,0 @@
-fragment BlogParts on Blog {
-  __typename
-  title
-  description
-  pubDate
-  heroImage
-  body
-}

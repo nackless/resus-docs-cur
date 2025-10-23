@@ -6,14 +6,9 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "tina-dev": "tinacms dev -c \"npm run dev\"",
-    "tina-build": "tinacms build && npm run build"
+    "astro": "astro"
   },
   "dependencies": {
-    "@tinacms/cli": "^1.11.0",
-    "astro": "^5.14.8",
-    "cloudinary": "^2.8.0",
-    "tinacms": "^2.9.0"
+    "astro": "^5.14.8"
   }
 }
