@@ -3,9 +3,6 @@ fragment BlogParts on Blog {
   title
   description
   pubDate
-  author
-  image
-  tags
-  category
+  heroImage
   body
 }

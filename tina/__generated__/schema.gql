@@ -91,10 +91,7 @@ type Blog implements Node & Document {
   title: String!
   description: String!
   pubDate: String!
-  author: String!
-  image: String
-  tags: [String]
-  category: String!
+  heroImage: String
   body: JSON
   id: ID!
   _sys: SystemInfo!
@@ -116,13 +113,6 @@ input DatetimeFilter {
   in: [String]
 }
 
-input ImageFilter {
-  startsWith: String
-  eq: String
-  exists: Boolean
-  in: [String]
-}
-
 input RichTextFilter {
   startsWith: String
   eq: String
@@ -133,10 +123,7 @@ input BlogFilter {
   title: StringFilter
   description: StringFilter
   pubDate: DatetimeFilter
-  author: StringFilter
-  image: ImageFilter
-  tags: StringFilter
-  category: StringFilter
+  heroImage: StringFilter
   body: RichTextFilter
 }
 
@@ -174,10 +161,7 @@ input BlogMutation {
   title: String
   description: String
   pubDate: String
-  author: String
-  image: String
-  tags: [String]
-  category: String
+  heroImage: String
   body: JSON
 }
 
