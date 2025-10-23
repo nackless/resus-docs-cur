@@ -1,15 +1,23 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import BlogCard from '../../components/BlogCard.astro';
-import { getCollection } from 'astro:content';
+import { getPosts } from '../../lib/queries';
+import { urlFor } from '../../lib/sanity';
 
-const allPosts = await getCollection('blog');
+const allPosts = await getPosts();
 const sortedPosts = allPosts.sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  (a, b) => new Date(b.publishedAt).valueOf() - new Date(a.publishedAt).valueOf()
 );
 
-// Get unique categories
-const categories = [...new Set(allPosts.map(post => post.data.category))];
+// Get unique categories from category references
+const categories = [
+  ...new Set(
+    allPosts
+      .flatMap(post => post.categories)
+      .filter(Boolean)
+      .map(cat => cat.title)
+  ),
+];
 ---
 
 <BaseLayout title="Blog - Medical Articles & Health Insights" description="Browse our collection of evidence-based medical articles and health insights.">
@@ -39,14 +47,14 @@ const categories = [...new Set(allPosts.map(post => post.data.category))];
         <!-- Blog Posts Grid -->
         <div class="posts-grid" id="posts-grid">
           {sortedPosts.map(post => (
-            <div class="post-item" data-category={post.data.category}>
+            <div class="post-item" data-category={post.categories?.map(c => c.title).join(',')}>
               <BlogCard
-                slug={post.slug}
-                title={post.data.title}
-                description={post.data.description}
-                pubDate={post.data.pubDate}
-                category={post.data.category}
-                image={post.data.image}
+                slug={post.slug.current}
+                title={post.title}
+                description={post.excerpt}
+                pubDate={post.publishedAt ? new Date(post.publishedAt) : new Date()}
+                category={post.categories?.[0]?.title || 'General'}
+                image={post.mainImage ? urlFor(post.mainImage).width(400).url() : '/placeholder.jpg'}
               />
             </div>
           ))}
@@ -188,8 +196,8 @@ const categories = [...new Set(allPosts.map(post => post.data.category))];
       
       // Filter posts
       posts.forEach(post => {
-        const postCategory = post.getAttribute('data-category');
-        if (category === 'all' || postCategory === category) {
+        const postCategories = post.getAttribute('data-category');
+        if (category === 'all' || postCategories?.includes(category)) {
           post.classList.remove('hidden');
         } else {
           post.classList.add('hidden');

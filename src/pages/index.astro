@@ -1,15 +1,19 @@
-
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BlogCard from '../components/BlogCard.astro';
 import Newsletter from '../components/Newsletter.astro';
-import { getCollection } from 'astro:content';
+import { getPosts } from '../lib/queries';
+import { urlFor } from '../lib/sanity';
 
 // Get the 3 most recent blog posts
-const allPosts = await getCollection('blog');
-const recentPosts = allPosts
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
-  .slice(0, 3);
+const allPosts = await getPosts();
+console.log('Fetched posts from Sanity:', allPosts);
+const recentPosts = allPosts.slice(0, 3);
+
+// Test if we're getting proper image URLs
+if (allPosts.length > 0 && allPosts[0].mainImage) {
+  console.log('Sample image URL:', urlFor(allPosts[0].mainImage).url());
+}
 ---
 
 <BaseLayout title="Home - Your Trusted Medical Information Source">
@@ -92,15 +96,21 @@ const recentPosts = allPosts
         <div class="posts-grid">
           {recentPosts.map(post => (
             <BlogCard
-              slug={post.slug}
-              title={post.data.title}
-              description={post.data.description}
-              pubDate={post.data.pubDate}
-              category={post.data.category}
-              image={post.data.image}
+              slug={post.slug.current}
+              title={post.title}
+              description={post.excerpt}
+              pubDate={post.publishedAt ? new Date(post.publishedAt) : new Date()}
+              category={post.categories?.[0]?.title || 'General'}
+              image={post.mainImage ? urlFor(post.mainImage).width(400).url() : '/placeholder.jpg'}
             />
           ))}
         </div>
+
+        {recentPosts.length === 0 && (
+          <div class="no-posts">
+            <p>No articles available yet. Check back soon!</p>
+          </div>
+        )}
       </div>
     </section>
     
@@ -270,6 +280,13 @@ const recentPosts = allPosts
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 2rem;
+  }
+  
+  .no-posts {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: #666;
+    font-size: 1.125rem;
   }
   
   /* CTA Section */
