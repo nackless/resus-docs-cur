@@ -48,38 +48,8 @@ export default defineConfig({
           },
           {
             type: 'string',
-            name: 'author',
-            label: 'Author',
-            required: true,
-          },
-          {
-            type: 'image',
-            name: 'image',
-            label: 'Featured Image',
-          },
-          {
-            type: 'string',
-            name: 'tags',
-            label: 'Tags',
-            list: true,
-            ui: {
-              component: 'tags',
-            },
-          },
-          {
-            type: 'string',
-            name: 'category',
-            label: 'Category',
-            options: [
-              'cardiology',
-              'neurology', 
-              'pediatrics',
-              'general',
-              'nutrition',
-              'mental-health',
-              'oncology'
-            ],
-            required: true,
+            name: 'heroImage',
+            label: 'Hero Image',
           },
           {
             type: 'rich-text',
