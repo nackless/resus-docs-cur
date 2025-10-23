@@ -2,54 +2,70 @@
 import { getPosts, getPostBySlug } from '../../lib/queries';
 import { urlFor } from '../../lib/sanity';
 import BlogPost from '../../layouts/BlogPost.astro';
-import { PortableText as PortableTextComponent } from '@portabletext/react';
-
-const PortableText = (props) => (
-  <PortableTextComponent
-    {...props}
-    components={{
-      types: {
-        image: ({value}) => (
-          <img src={urlFor(value).url()} alt={value.alt || ''} />
-        ),
-      },
-    }}
-  />
-);
 
 export async function getStaticPaths() {
   const posts = await getPosts();
   return posts.map(post => ({
     params: { slug: post.slug.current },
-    props: { post },
+    props: { post }
   }));
 }
 
-const { slug } = Astro.params;
-const post = await getPostBySlug(slug);
+const { post } = Astro.props;
 
 if (!post) {
   return Astro.redirect('/404');
 }
 
-// Convert Sanity data to match BlogPost layout expectations
 const frontmatter = {
   title: post.title,
   description: post.excerpt || post.title,
-  pubDate: new Date(post.publishedAt), // Convert string to Date
+  pubDate: new Date(post.publishedAt),
   image: post.mainImage ? urlFor(post.mainImage).width(1200).url() : null,
   author: post.author?.name || 'Healthcare Team',
   category: post.categories?.[0]?.title || 'General',
-  tags: post.categories?.map(cat => cat.title) || [],
+  tags: post.categories?.map(cat => cat.title) || []
 };
+
+function renderContent(content) {
+  if (!content) return '';
+  
+  return content.map(block => {
+    if (block._type === 'block') {
+      const style = block.style || 'normal';
+      const text = block.children
+        .map(child => child.text)
+        .join('');
+      
+      switch (style) {
+        case 'h1':
+          return `<h1>${text}</h1>`;
+        case 'h2':
+          return `<h2>${text}</h2>`;
+        case 'h3':
+          return `<h3>${text}</h3>`;
+        case 'blockquote':
+          return `<blockquote>${text}</blockquote>`;
+        default:
+          return `<p>${text}</p>`;
+      }
+    }
+    
+    if (block._type === 'image' && block.asset) {
+      return `<img src="${urlFor(block).url()}" alt="${block.alt || ''}" class="content-image" />`;
+    }
+    
+    return '';
+  }).join('\n\n');
+}
+
+const content = renderContent(post.body);
 ---
 
 <BlogPost frontmatter={frontmatter}>
-  {post.body && (
-    <div class="post-content">
-      <PortableText value={post.body} />
-    </div>
-  )}
+  <div class="post-content">
+    <div set:html={content} />
+  </div>
 
   {post.author && (
     <div class="author-bio">
@@ -72,6 +88,13 @@ const frontmatter = {
   .post-content {
     margin: 2rem 0;
     line-height: 1.8;
+  }
+
+  .content-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 2rem 0;
   }
 
   .author-bio {
