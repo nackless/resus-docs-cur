@@ -1,11 +1,8 @@
 # Netlify Build Configuration
+
 [build]
-  command = "npm install && npm run build"
+  command = "npm run build"
   publish = "dist"
 
 [build.environment]
   NODE_VERSION = "18.14.1"
-  NPM_FLAGS = "--legacy-peer-deps"
-  from = "/graphql"
-  to = "/admin/index.html"
-  status = 200
