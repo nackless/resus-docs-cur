@@ -2,6 +2,9 @@
   "name": "resus-docs",
   "version": "0.0.1",
   "type": "module",
+  "engines": {
+    "node": ">=18.14.1"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
