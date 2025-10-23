@@ -111,10 +111,28 @@ const currentPath = Astro.url.pathname;
     
     .nav-links {
       display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      flex-direction: column;
+      gap: 1rem;
+    }
+    
+    .nav-links.mobile-open {
+      display: flex;
+    }
+    
+    .nav-links a.active::after {
+      bottom: -4px;
     }
     
     .container {
       padding: 1rem 1.5rem;
+      position: relative;
     }
   }
 </style>
@@ -122,8 +140,20 @@ const currentPath = Astro.url.pathname;
 <script>
   const toggle = document.querySelector('.mobile-menu-toggle');
   const navLinks = document.querySelector('.nav-links');
+  const header = document.querySelector('header');
   
   toggle?.addEventListener('click', () => {
     navLinks?.classList.toggle('mobile-open');
+    toggle.setAttribute('aria-expanded', 
+      navLinks?.classList.contains('mobile-open') ? 'true' : 'false'
+    );
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!header?.contains(e.target as Node) && navLinks?.classList.contains('mobile-open')) {
+      navLinks.classList.remove('mobile-open');
+      toggle?.setAttribute('aria-expanded', 'false');
+    }
   });
 </script>
