@@ -2,7 +2,20 @@
 import { getPosts, getPostBySlug } from '../../lib/queries';
 import { urlFor } from '../../lib/sanity';
 import BlogPost from '../../layouts/BlogPost.astro';
-import { PortableText } from 'astro-sanity';
+import { PortableText as PortableTextComponent } from '@portabletext/react';
+
+const PortableText = (props) => (
+  <PortableTextComponent
+    {...props}
+    components={{
+      types: {
+        image: ({value}) => (
+          <img src={urlFor(value).url()} alt={value.alt || ''} />
+        ),
+      },
+    }}
+  />
+);
 
 export async function getStaticPaths() {
   const posts = await getPosts();
