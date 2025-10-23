@@ -1,29 +1,51 @@
+var __defProp = Object.defineProperty;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+
 // tina/config.ts
 import { defineConfig } from "tinacms";
 
-// src/lib/cloudinary-media-store.ts
-import "tinacms";
+// src/lib/tina-cloudinary-store.ts
 import { v2 as cloudinary } from "cloudinary";
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
-var CloudinaryMediaStore = class {
+function configureCloudinary() {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+  });
+}
+var CloudinaryStore = class {
+  constructor() {
+    __publicField(this, "accept", "image/*");
+  }
   async persist(files) {
-    const uploadedFiles = await Promise.all(
+    return Promise.all(
       files.map(async (file) => {
         try {
-          const result = await cloudinary.uploader.upload(file.directory + "/" + file.filename, {
-            public_id: file.filename.split(".")[0],
-            folder: "resus-docs",
-            resource_type: "auto"
+          const reader = new FileReader();
+          const base64Promise = new Promise((resolve) => {
+            reader.onloadend = () => {
+              const base64 = reader.result?.toString() || "";
+              resolve(base64.replace(/^data:.+;base64,/, ""));
+            };
+            reader.readAsDataURL(file.file);
           });
+          const base64Data = await base64Promise;
+          const uploadResult = await cloudinary.uploader.upload(
+            "data:image/png;base64," + base64Data,
+            {
+              public_id: file.file.name.split(".")[0],
+              folder: "resus-docs",
+              resource_type: "auto"
+            }
+          );
           return {
-            ...file,
-            directory: result.public_id,
-            filename: result.public_id + "." + result.format,
-            id: result.public_id
+            type: "file",
+            id: uploadResult.public_id,
+            filename: uploadResult.public_id + "." + uploadResult.format,
+            directory: "uploads",
+            previewSrc: uploadResult.secure_url,
+            src: uploadResult.secure_url
           };
         } catch (error) {
           console.error("Cloudinary upload error:", error);
@@ -31,7 +53,6 @@ var CloudinaryMediaStore = class {
         }
       })
     );
-    return uploadedFiles;
   }
   async delete(media) {
     try {
@@ -43,25 +64,34 @@ var CloudinaryMediaStore = class {
   }
   async list() {
     try {
-      const result = await cloudinary.search.expression("folder:resus-docs").sort_by([["created_at", "desc"]]).max_results(500).execute();
-      return result.resources.map((resource) => ({
-        id: resource.public_id,
-        filename: resource.public_id + "." + resource.format,
-        directory: resource.public_id,
-        type: resource.resource_type,
-        size: resource.bytes,
-        url: resource.secure_url
-      }));
+      const result = await cloudinary.search.expression("folder:resus-docs").sort_by("created_at", "desc").max_results(500).execute();
+      return {
+        items: result.resources.map((resource) => ({
+          type: "file",
+          id: resource.public_id,
+          filename: resource.public_id + "." + resource.format,
+          directory: "uploads",
+          previewSrc: resource.secure_url,
+          src: resource.secure_url
+        }))
+      };
     } catch (error) {
       console.error("Cloudinary list error:", error);
-      return [];
+      return { items: [] };
     }
+  }
+};
+var TinaCloudinaryMediaStore = class {
+  constructor() {
+    __publicField(this, "store", CloudinaryStore);
+    configureCloudinary();
   }
 };
 
 // tina/config.ts
 var branch = process.env.HEAD || process.env.VERCEL_GIT_COMMIT_REF || "main";
 var apiURL = process.env.TINA_PUBLIC_IS_LOCAL === "true" ? "http://localhost:4001/graphql" : `https://content.tinajs.io/content/${process.env.TINA_PUBLIC_TINA_CLIENT_ID}/github/${branch}`;
+var mediaStore = new TinaCloudinaryMediaStore();
 var config_default = defineConfig({
   branch,
   clientId: process.env.TINA_PUBLIC_TINA_CLIENT_ID,
@@ -71,10 +101,7 @@ var config_default = defineConfig({
     publicFolder: "public"
   },
   media: {
-    // Return the CloudinaryMediaStore class so the admin can instantiate it.
-    // Returning the class (wrapped in a Promise) satisfies the Tina admin loader
-    // which will `new` the class when it finds a `.prototype.persist` implementation.
-    loadCustomStore: () => Promise.resolve(CloudinaryMediaStore)
+    loadCustomStore: async () => mediaStore.store
   },
   schema: {
     collections: [
