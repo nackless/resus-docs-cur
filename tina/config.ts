@@ -1,13 +1,10 @@
 import { defineConfig } from 'tinacms'
-import { TinaCloudinaryMediaStore } from '../src/lib/tina-cloudinary-store'
 
 // Your hosting provider likely supplies these as env variables
 const branch = process.env.HEAD || process.env.VERCEL_GIT_COMMIT_REF || 'main'
 const apiURL = process.env.TINA_PUBLIC_IS_LOCAL === 'true' 
   ? 'http://localhost:4001/graphql' 
   : `https://content.tinajs.io/content/${process.env.TINA_PUBLIC_TINA_CLIENT_ID}/github/${branch}`
-
-const mediaStore = new TinaCloudinaryMediaStore()
 
 export default defineConfig({
   branch,
@@ -18,7 +15,10 @@ export default defineConfig({
     publicFolder: 'public',
   },
   media: {
-    loadCustomStore: async () => mediaStore.store,
+    tina: {
+      publicFolder: 'public',
+      mediaRoot: 'uploads',
+    },
   },
   schema: {
     collections: [
