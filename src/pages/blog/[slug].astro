@@ -3,15 +3,48 @@ import { getPosts, getPostBySlug } from '../../lib/queries';
 import { urlFor } from '../../lib/sanity';
 import BlogPost from '../../layouts/BlogPost.astro';
 
+interface Author {
+  name: string;
+  image?: {
+    asset: {
+      _ref: string;
+    };
+  };
+  bio?: string;
+}
+
+interface Category {
+  title: string;
+}
+
+interface SanityPost {
+  title: string;
+  slug: { current: string };
+  excerpt?: string;
+  publishedAt: string;
+  mainImage?: {
+    asset: {
+      _ref: string;
+    };
+  };
+  author?: Author;
+  categories?: Category[];
+  body?: any[];
+}
+
 export async function getStaticPaths() {
-  const posts = await getPosts();
+  const posts = await getPosts() as SanityPost[];
   return posts.map(post => ({
     params: { slug: post.slug.current },
     props: { post }
   }));
 }
 
-const { post } = Astro.props;
+interface Props {
+  post: SanityPost;
+}
+
+const { post } = Astro.props as Props;
 
 if (!post) {
   return Astro.redirect('/404');

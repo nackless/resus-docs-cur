@@ -188,7 +188,7 @@ const categories = [
   
   pills.forEach(pill => {
     pill.addEventListener('click', () => {
-      const category = pill.getAttribute('data-category');
+      const selectedCategory = pill.getAttribute('data-category') ?? 'all';
       
       // Update active state
       pills.forEach(p => p.classList.remove('active'));
@@ -196,12 +196,11 @@ const categories = [
       
       // Filter posts
       posts.forEach(post => {
-        const postCategories = post.getAttribute('data-category');
-        if (category === 'all' || postCategories?.includes(category)) {
-          post.classList.remove('hidden');
-        } else {
-          post.classList.add('hidden');
-        }
+        const postCategories = post.getAttribute('data-category') ?? '';
+        const categories = postCategories.split(',').filter(Boolean);
+        const isVisible = selectedCategory === 'all' || categories.includes(selectedCategory);
+        
+        post.classList.toggle('hidden', !isVisible);
       });
     });
   });
