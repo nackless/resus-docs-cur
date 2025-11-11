@@ -2,6 +2,7 @@
 import { getPosts, getPostBySlug } from '../../lib/queries';
 import { urlFor } from '../../lib/sanity';
 import BlogPost from '../../layouts/BlogPost.astro';
+import { toHTML } from '@portabletext/to-html';
 
 interface Author {
   name: string;
@@ -27,6 +28,13 @@ interface SanityPost {
       _ref: string;
     };
   };
+  // legacy fallbacks
+  image?: {
+    asset: {
+      _ref: string;
+    };
+  };
+  content?: any[];
   author?: Author;
   categories?: Category[];
   body?: any[];
@@ -50,54 +58,59 @@ if (!post) {
   return Astro.redirect('/404');
 }
 
+// Use legacy fallbacks when necessary
+const postImage = post.mainImage ?? post.image;
+const rawContent = post.body ?? post.content;
+
 const frontmatter = {
   title: post.title,
   description: post.excerpt || post.title,
   pubDate: new Date(post.publishedAt),
-  image: post.mainImage ? urlFor(post.mainImage).width(1200).url() : null,
+  image: postImage ? urlFor(postImage).width(1200).url() : null,
   author: post.author?.name || 'Healthcare Team',
   category: post.categories?.[0]?.title || 'General',
   tags: post.categories?.map(cat => cat.title) || []
 };
 
-function renderContent(content) {
-  if (!content) return '';
-  
-  return content.map(block => {
-    if (block._type === 'block') {
-      const style = block.style || 'normal';
-      const text = block.children
-        .map(child => child.text)
-        .join('');
-      
-      switch (style) {
-        case 'h1':
-          return `<h1>${text}</h1>`;
-        case 'h2':
-          return `<h2>${text}</h2>`;
-        case 'h3':
-          return `<h3>${text}</h3>`;
-        case 'blockquote':
-          return `<blockquote>${text}</blockquote>`;
-        default:
-          return `<p>${text}</p>`;
+// Use @portabletext/to-html to render portable text to HTML on the server
+let contentHtml: string | null = null;
+if (rawContent && Array.isArray(rawContent) && rawContent.length > 0) {
+  contentHtml = toHTML(rawContent, {
+    // Provide custom serializers for types/marks that need special handling
+    components: {
+      types: {
+        image: ({ value }) => {
+          // value is the image block from Sanity
+          try {
+            const src = urlFor(value).width(1200).url();
+            const alt = value.alt || '';
+            return `<img src="${src}" alt="${alt}" class="content-image" />`;
+          } catch (e) {
+            return '';
+          }
+        }
+      },
+      marks: {
+        link: ({ children, value }) => {
+          const href = value?.href || '#';
+          const target = value?.blank ? ' target="_blank" rel="noopener noreferrer"' : '';
+          return `<a href="${href}"${target}>${children}</a>`;
+        }
       }
     }
-    
-    if (block._type === 'image' && block.asset) {
-      return `<img src="${urlFor(block).url()}" alt="${block.alt || ''}" class="content-image" />`;
-    }
-    
-    return '';
-  }).join('\n\n');
+  });
 }
-
-const content = renderContent(post.body);
 ---
 
 <BlogPost frontmatter={frontmatter}>
   <div class="post-content">
-    <div set:html={content} />
+    {contentHtml ? (
+      <div set:html={contentHtml} />
+    ) : (
+      <div class="no-content">
+        <p>{post.excerpt || 'This article has no body content yet.'}</p>
+      </div>
+    )}
   </div>
 
   {post.author && (
