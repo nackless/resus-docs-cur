@@ -5,9 +5,6 @@ import { getPosts } from '../../lib/queries';
 import { urlFor } from '../../lib/sanity';
 
 const allPosts = await getPosts();
-const sortedPosts = allPosts.sort(
-  (a, b) => new Date(b.publishedAt).valueOf() - new Date(a.publishedAt).valueOf()
-);
 
 // Get unique categories from category references
 const categories = [
@@ -46,7 +43,7 @@ const categories = [
         
         <!-- Blog Posts Grid -->
         <div class="posts-grid" id="posts-grid">
-          {sortedPosts.map(post => (
+          {allPosts.map(post => (
             <div class="post-item" data-category={post.categories?.map(c => c.title).join(',')}>
               <BlogCard
                 slug={post.slug.current}
@@ -60,7 +57,7 @@ const categories = [
           ))}
         </div>
         
-        {sortedPosts.length === 0 && (
+        {allPosts.length === 0 && (
           <div class="no-posts">
             <p>No articles found. Check back soon for new content!</p>
           </div>

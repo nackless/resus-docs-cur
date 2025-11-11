@@ -2,43 +2,8 @@
 import { getPosts, getPostBySlug } from '../../lib/queries';
 import { urlFor } from '../../lib/sanity';
 import BlogPost from '../../layouts/BlogPost.astro';
-import { toHTML } from '@portabletext/to-html';
-
-interface Author {
-  name: string;
-  image?: {
-    asset: {
-      _ref: string;
-    };
-  };
-  bio?: string;
-}
-
-interface Category {
-  title: string;
-}
-
-interface SanityPost {
-  title: string;
-  slug: { current: string };
-  excerpt?: string;
-  publishedAt: string;
-  mainImage?: {
-    asset: {
-      _ref: string;
-    };
-  };
-  // legacy fallbacks
-  image?: {
-    asset: {
-      _ref: string;
-    };
-  };
-  content?: any[];
-  author?: Author;
-  categories?: Category[];
-  body?: any[];
-}
+import { sanityPortableText } from '../../lib/portableText';
+import type { SanityPost } from '../../lib/types';
 
 export async function getStaticPaths() {
   const posts = await getPosts() as SanityPost[];
@@ -68,33 +33,9 @@ const frontmatter = {
   tags: post.categories?.map(cat => cat.title) || []
 };
 
-// Use @portabletext/to-html to render portable text to HTML on the server
 let contentHtml: string | null = null;
 if (rawContent && Array.isArray(rawContent) && rawContent.length > 0) {
-  contentHtml = toHTML(rawContent, {
-    // Provide custom serializers for types/marks that need special handling
-    components: {
-      types: {
-        image: ({ value }) => {
-          // value is the image block from Sanity
-          try {
-            const src = urlFor(value).width(1200).url();
-            const alt = value.alt || '';
-            return `<img src="${src}" alt="${alt}" class="content-image" />`;
-          } catch (e) {
-            return '';
-          }
-        }
-      },
-      marks: {
-        link: ({ children, value }) => {
-          const href = value?.href || '#';
-          const target = value?.blank ? ' target="_blank" rel="noopener noreferrer"' : '';
-          return `<a href="${href}"${target}>${children}</a>`;
-        }
-      }
-    }
-  });
+  contentHtml = sanityPortableText(rawContent);
 }
 ---
 
