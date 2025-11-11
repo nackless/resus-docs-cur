@@ -4,10 +4,6 @@ export default defineType({
   name: 'post',
   title: 'Post',
   type: 'document',
-  // Default the publishedAt to now for new documents so it doesn't
-  // default to the Unix epoch (1970-01-01) when left empty in the Studio.
-  // `initialValue` runs client-side in the Studio when creating a new doc.
-  initialValue: () => ({ publishedAt: new Date().toISOString() }),
   fields: [
     defineField({
       name: 'title',
@@ -47,6 +43,7 @@ export default defineType({
       name: 'publishedAt',
       title: 'Published at',
       type: 'datetime',
+      initialValue: () => new Date().toISOString(),
     }),
     defineField({
       name: 'body',
