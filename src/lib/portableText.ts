@@ -6,7 +6,7 @@ const customComponents = {
     image: ({ value }: { value: any }) => {
       // value is the image block from Sanity
       try {
-        const src = urlFor(value).width(1200).url();
+        const src = urlFor(value).width(1200).format('webp').quality(80).url();
         const alt = value.alt || '';
         return `<img src="${src}" alt="${alt}" class="content-image" />`;
       } catch (e) {

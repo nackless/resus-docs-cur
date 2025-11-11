@@ -51,7 +51,7 @@ const categories = [
                 description={post.excerpt}
                 pubDate={post.publishedAt ? new Date(post.publishedAt) : new Date()}
                 category={post.categories?.[0]?.title || 'General'}
-                image={post.mainImage ? urlFor(post.mainImage).width(400).url() : '/placeholder.jpg'}
+                image={post.mainImage ? urlFor(post.mainImage).width(400).format('webp').quality(80).url() : '/placeholder.jpg'}
               />
             </div>
           ))}
