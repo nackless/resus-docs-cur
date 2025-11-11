@@ -44,15 +44,11 @@ export async function getStaticPaths() {
   const posts = await getPosts() as SanityPost[];
   return posts.map(post => ({
     params: { slug: post.slug.current },
-    props: { post }
   }));
 }
 
-interface Props {
-  post: SanityPost;
-}
-
-const { post } = Astro.props as Props;
+const { slug } = Astro.params;
+const post = await getPostBySlug(slug as string);
 
 if (!post) {
   return Astro.redirect('/404');
