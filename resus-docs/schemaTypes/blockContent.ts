@@ -62,6 +62,27 @@ export default defineType({
     defineArrayMember({
       type: 'image',
       options: {hotspot: true},
+      fields: [
+        {
+          name: 'width',
+          title: 'Width',
+          type: 'string',
+          options: {
+            list: [
+              {title: 'Full', value: 'full'},
+              {title: 'Half', value: 'half'},
+              {title: 'Quarter', value: 'quarter'},
+            ],
+            layout: 'radio',
+          },
+          initialValue: 'full',
+        },
+        {
+          name: 'alt',
+          title: 'Alternative text',
+          type: 'string',
+        },
+      ],
     }),
   ],
 })
