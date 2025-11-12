@@ -28,6 +28,7 @@ const frontmatter = {
   description: post.excerpt || post.title,
   pubDate: new Date(post.publishedAt),
   image: postImage ? urlFor(postImage).width(1200).format('webp').quality(80).url() : null,
+  image_alt: postImage?.alt || post.title,
   author: post.author?.name || 'Healthcare Team',
   category: post.categories?.[0]?.title || 'General',
   tags: post.categories?.map(cat => cat.title) || []
