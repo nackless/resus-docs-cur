@@ -18,6 +18,11 @@ const customComponents = {
             className = 'content-image quarter-width';
             break;
         }
+
+        if (value.alignment) {
+          className += ` align-${value.alignment}`;
+        }
+
         const src = urlFor(value).width(width).format('webp').quality(80).url();
         const alt = value.alt || '';
         return `<img src="${src}" alt="${alt}" class="${className}" />`;

@@ -82,6 +82,20 @@ export default defineType({
           title: 'Alternative text',
           type: 'string',
         },
+        {
+          name: 'alignment',
+          title: 'Alignment',
+          type: 'string',
+          options: {
+            list: [
+              {title: 'Left', value: 'left'},
+              {title: 'Center', value: 'center'},
+              {title: 'Right', value: 'right'},
+            ],
+            layout: 'radio',
+          },
+          initialValue: 'center',
+        },
       ],
     }),
   ],
