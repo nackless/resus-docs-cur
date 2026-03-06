@@ -1,22 +1,14 @@
-# Resus Docs - Medical Blog with TinaCMS
+# Resus Docs - Medical Blog with Sanity
 
-A modern medical blog built with Astro and TinaCMS for easy content management and mobile publishing.
+A modern medical blog built with [Astro](https://astro.build) and [Sanity CMS](https://www.sanity.io) for fast performance, easy content management, and mobile publishing.
 
 ## 🚀 Features
 
-- **Astro Framework** - Fast, modern static site generation
-- **TinaCMS** - Visual content editing with mobile support
+- **Astro Framework** - Fast, modern static site generation with zero JavaScript by default
+- **Sanity CMS** - Headless, API-first CMS for structured medical content and real-time collaboration
 - **Medical Content** - Specialized for healthcare professionals
 - **Responsive Design** - Works perfectly on all devices
 - **SEO Optimized** - Built for search engine visibility
-
-## 📱 Mobile Publishing
-
-TinaCMS provides excellent mobile editing capabilities:
-- Touch-friendly interface
-- Real-time preview
-- Offline editing support
-- Progressive Web App features
 
 ## 🛠️ Development Setup
 
@@ -33,74 +25,55 @@ TinaCMS provides excellent mobile editing capabilities:
    npm install
    ```
 
-2. **Set up TinaCMS:**
+2. **Set up Environment Variables:**
    ```bash
-   # Copy environment variables
-   cp .env.example .env.local
+   # Copy environment variables (if .env.example exists)
+   cp .env.example .env
    
-   # Edit .env.local with your TinaCMS credentials
+   # Provide your Sanity project credentials inside .env
+   SANITY_PROJECT_ID="your-project-id" # e.g. l4hoyndj
+   SANITY_DATASET="production"
    ```
 
 3. **Run development server:**
    ```bash
-   # Start TinaCMS with Astro
-   npm run tina-dev
-   
-   # Or just Astro
+   # Start the Astro dev server
    npm run dev
    ```
 
-4. **Access the admin panel:**
-   - Visit `http://localhost:4321/admin` for TinaCMS editor
-   - Visit `http://localhost:4321` for your blog
+4. **Access your blog locally:**
+   - Visit `http://localhost:4321` to view your site
 
 ## 📝 Content Management
 
-### Blog Posts
-- **Title** - Post title
-- **Description** - SEO description
-- **Author** - Post author
-- **Category** - Medical specialty
-- **Tags** - Searchable tags
-- **Featured Image** - Hero image
-- **Content** - Rich text editor with markdown support
+Your content is managed remotely via Sanity Studio. Log into your project's Sanity dashboard to create, edit, or delete:
+- **Blog Posts**: Titles, specific categories, excerpts, hero images, and Markdown/Rich text body.
+- **Categories**: Such as Cardiology, Neurology, Pediatrics, etc.
 
-### Categories
-- Cardiology
-- Neurology
-- Pediatrics
-- General Medicine
-- Nutrition
-- Mental Health
-- Oncology
-
-## 🌐 Deployment to Netlify
+## 🌐 Deployment to Netlify or Vercel
 
 ### Automatic Deployment
 
-1. **Connect to Netlify:**
+1. **Connect to your Hosting Provider:**
    - Push your code to GitHub
-   - Connect your repo to Netlify
-   - Netlify will auto-deploy on every push
+   - Connect your repo to Netlify, Vercel, or any other hosting solution
+   - This setup will auto-deploy your site on every push
 
-2. **Set Environment Variables in Netlify:**
-   ```
-   TINA_PUBLIC_TINA_CLIENT_ID = your-client-id
-   TINA_TOKEN = your-token
-   ```
+2. **Set Environment Variables in your Host:**
+   Provide `SANITY_PROJECT_ID` and `SANITY_DATASET` inside your host's dashboard.
 
 3. **Build Settings:**
-   - Build Command: `npm run tina-build`
+   - Build Command: `npm run build`
    - Publish Directory: `dist`
 
 ### Manual Deployment
 
 ```bash
 # Build for production
-npm run tina-build
+npm run build
 
-# Deploy to Netlify
-npx netlify deploy --prod --dir=dist
+# To quickly preview the build locally
+npm run preview
 ```
 
 ## 📁 Project Structure
@@ -108,59 +81,27 @@ npx netlify deploy --prod --dir=dist
 ```
 resus-docs/
 ├── src/
-│   ├── components/     # Astro components
-│   ├── layouts/        # Page layouts
-│   ├── pages/          # Astro pages
-│   └── content/
-│       └── blog/       # Markdown blog posts
-├── tina/
-│   └── config.ts       # TinaCMS configuration
-├── public/             # Static assets
-├── netlify.toml        # Netlify configuration
+│   ├── components/     # Astro UI components
+│   ├── layouts/        # Global page layouts
+│   ├── pages/          # Astro page routes
+│   └── lib/            # Sanity utilities, queries, and parsers
+├── public/             # Static assets (fonts, images, icons)
+├── astro.config.mjs    # Astro and Sanity integration configs
 └── package.json
 ```
-
-## 🔧 TinaCMS Configuration
-
-The TinaCMS configuration is in `tina/config.ts` and includes:
-- Blog post schema
-- Media management
-- Content validation
-- Mobile-optimized editing
-
-## 📱 Mobile Editing
-
-TinaCMS provides:
-- **Responsive Editor** - Works on all screen sizes
-- **Touch Interface** - Optimized for mobile devices
-- **Real-time Preview** - See changes instantly
-- **Offline Support** - Edit without internet connection
-
-## 🎨 Customization
-
-### Styling
-- Edit CSS in component files
-- Global styles in `src/layouts/BaseLayout.astro`
-- Responsive design included
-
-### Content Types
-- Modify `tina/config.ts` to add new content types
-- Add new fields to existing collections
-- Customize the editing interface
 
 ## 🚀 Performance
 
 - **Astro** - Zero JavaScript by default
-- **Static Generation** - Pre-built pages for speed
-- **Image Optimization** - Automatic image processing
-- **CDN Ready** - Works with any CDN
+- **Static Generation** - Pre-built pages for maximum speed
+- **Image Optimization** - Sanity CDN processing for fast images
+- **CDN Ready** - Deploy anywhere, instantly
 
 ## 📞 Support
 
 For issues with:
 - **Astro**: [Astro Documentation](https://docs.astro.build)
-- **TinaCMS**: [TinaCMS Documentation](https://tina.io/docs)
-- **Netlify**: [Netlify Documentation](https://docs.netlify.com)
+- **Sanity**: [Sanity CMS Documentation](https://www.sanity.io/docs)
 
 ## 📄 License
 
