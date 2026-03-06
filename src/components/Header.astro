@@ -5,10 +5,25 @@ const currentPath = Astro.url.pathname;
 <header>
   <nav>
     <div class="container">
-      <a href="/" class="logo">
-        <svg width="36" height="36" viewBox="0 0 36 36">
-          <rect fill="#2563eb" width="36" height="36" rx="8"/>
-          <path d="M18 10v16M10 18h16" stroke="white" stroke-width="3" stroke-linecap="round"/>
+        <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#2563eb" />
+              <stop offset="100%" stop-color="#764ba2" />
+            </linearGradient>
+            <linearGradient id="box-grad" x1="100%" y1="100%" x2="0%" y2="0%">
+              <stop offset="0%" stop-color="#dbeafe" />
+              <stop offset="100%" stop-color="#ffffff" />
+            </linearGradient>
+          </defs>
+          <!-- Background Document Base -->
+          <rect x="15" y="10" width="55" height="70" rx="8" fill="url(#box-grad)" stroke="url(#logo-grad)" stroke-width="4" />
+          <path d="M70 10 l15 15 v55 a8 8 0 0 1 -8 8 h-62" fill="none" stroke="url(#logo-grad)" stroke-width="4" stroke-linecap="round"/>
+          <path d="M70 10 v15 h15" fill="none" stroke="url(#logo-grad)" stroke-width="4" stroke-linejoin="round"/>
+          <!-- Clean Medical Cross inside document -->
+          <path d="M35 32 h15 v-15 h10 v15 h15 v10 h-15 v15 h-10 v-15 h-15 z" fill="url(#logo-grad)" />
+          <!-- Small heartbeat accent -->
+          <path d="M10 70 h25 l5 -10 l10 20 l5 -10 h35" fill="none" stroke="#2563eb" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
         </svg>
         <span>Resus Docs</span>
       </a>
@@ -53,7 +68,7 @@ const currentPath = Astro.url.pathname;
     gap: 0.75rem;
     font-size: 1.5rem;
     font-weight: 700;
-    color: #2563eb;
+    color: var(--brand-blue);
     text-decoration: none;
   }
   
@@ -86,12 +101,12 @@ const currentPath = Astro.url.pathname;
   }
   
   .nav-links a:hover {
-    color: #2563eb;
+    color: var(--brand-blue);
     text-decoration: none;
   }
   
   .nav-links a.active {
-    color: #2563eb;
+    color: var(--brand-blue);
   }
   
   .nav-links a.active::after {
@@ -101,7 +116,7 @@ const currentPath = Astro.url.pathname;
     left: 0;
     right: 0;
     height: 2px;
-    background: #2563eb;
+    background: var(--brand-blue);
   }
   
   @media (max-width: 768px) {

@@ -9,11 +9,27 @@ const currentYear = new Date().getFullYear();
     <div class="footer-grid">
       <div class="footer-section">
         <div class="footer-logo">
-          <svg width="32" height="32" viewBox="0 0 32 32">
-            <rect fill="#2563eb" width="32" height="32" rx="6"/>
-            <path d="M16 8v16M8 16h16" stroke="white" stroke-width="3" stroke-linecap="round"/>
+          <svg width="36" height="36" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="footer-logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#60a5fa" />
+                <stop offset="100%" stop-color="#c084fc" />
+              </linearGradient>
+              <linearGradient id="footer-box-grad" x1="100%" y1="100%" x2="0%" y2="0%">
+                <stop offset="0%" stop-color="#1f2937" />
+                <stop offset="100%" stop-color="#374151" />
+              </linearGradient>
+            </defs>
+            <!-- Background Document Base (dark mode tailored) -->
+            <rect x="15" y="10" width="55" height="70" rx="8" fill="url(#footer-box-grad)" stroke="url(#footer-logo-grad)" stroke-width="4" />
+            <path d="M70 10 l15 15 v55 a8 8 0 0 1 -8 8 h-62" fill="none" stroke="url(#footer-logo-grad)" stroke-width="4" stroke-linecap="round"/>
+            <path d="M70 10 v15 h15" fill="none" stroke="url(#footer-logo-grad)" stroke-width="4" stroke-linejoin="round"/>
+            <!-- Clean Medical Cross inside document -->
+            <path d="M35 32 h15 v-15 h10 v15 h15 v10 h-15 v15 h-10 v-15 h-15 z" fill="url(#footer-logo-grad)" />
+            <!-- Small heartbeat accent -->
+            <path d="M10 70 h25 l5 -10 l10 20 l5 -10 h35" fill="none" stroke="#93c5fd" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>
           </svg>
-          <span>MedBlog</span>
+          <span>Resus Docs</span>
         </div>
         <p class="footer-description">
           Your trusted source for medical information and health insights. 
@@ -34,10 +50,10 @@ const currentYear = new Date().getFullYear();
       <div class="footer-section">
         <h3>Categories</h3>
         <ul>
-          <li><a href="/blog">Cardiology</a></li>
-          <li><a href="/blog">Mental Health</a></li>
-          <li><a href="/blog">Nutrition</a></li>
-          <li><a href="/blog">General Health</a></li>
+          <li><a href="/blog/category/cardiology">Cardiology</a></li>
+          <li><a href="/blog/category/mental-health">Mental Health</a></li>
+          <li><a href="/blog/category/nutrition">Nutrition</a></li>
+          <li><a href="/blog/category/general-health">General Health</a></li>
         </ul>
       </div>
       

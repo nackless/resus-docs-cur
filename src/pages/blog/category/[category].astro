@@ -1,38 +1,58 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import BlogCard from '../../components/BlogCard.astro';
-import { getPosts } from '../../lib/queries';
-import { urlFor } from '../../lib/sanity';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BlogCard from '../../../components/BlogCard.astro';
+import { getPosts } from '../../../lib/queries';
+import { urlFor } from '../../../lib/sanity';
+import type { SanityPost } from '../../../lib/types';
 
-import type { SanityPost } from '../../lib/types';
+export async function getStaticPaths() {
+  const posts = await getPosts();
 
-let allPosts: SanityPost[] = [];
-try {
-  allPosts = await getPosts();
-} catch (error) {
-  console.error("Failed to fetch posts from Sanity:", error);
+  // Extract unique categories
+  const categories = [
+    ...new Set(
+      posts
+        .flatMap((post) => post.categories || [])
+        .filter(Boolean)
+        .map((cat) => cat.title)
+    ),
+  ];
+
+  // Map each category to a route
+  return categories.map((category) => {
+    // Determine a URL-friendly slug
+    const categorySlug = category?.toLowerCase().replace(/\s+/g, '-') || 'general';
+
+    // Filter posts for this specific category
+    const filteredPosts = posts.filter((post) => {
+      const postCategories = post.categories?.map((c) => c.title) || [];
+      return postCategories.includes(category!);
+    });
+
+    return {
+      params: { category: categorySlug },
+      props: {
+        categoryName: category,
+        posts: filteredPosts,
+        allCategories: categories, // pass all categories so we can render the navigation pills
+      },
+    };
+  });
 }
 
-// Get unique categories from category references
-const categories = [
-  ...new Set(
-    allPosts
-      .flatMap(post => post.categories || [])
-      .filter(Boolean)
-      .map(cat => cat.title)
-  ),
-];
+// Props passed from getStaticPaths
+const { categoryName, posts, allCategories } = Astro.props;
+const { category } = Astro.params;
 ---
 
 <BaseLayout 
-  title="Blog - Medical Articles & Health Insights" 
-  description="Browse our collection of evidence-based medical articles and health insights."
-  image="/favicon.svg"
+  title={`${categoryName} Articles - MedBlog`} 
+  description={`Browse our collection of evidence-based medical articles categorized under ${categoryName}.`}
 >
   <div class="blog-page">
     <div class="blog-header">
       <div class="container">
-        <h1>Medical Blog</h1>
+        <h1>{categoryName} Articles</h1>
         <p>Evidence-based health information and medical insights from healthcare professionals</p>
       </div>
     </div>
@@ -43,12 +63,16 @@ const categories = [
         <div class="category-filter">
           <h2>Categories</h2>
           <div class="category-pills">
-            <a href="/blog" class="category-pill active">All Articles</a>
-            {categories.map(category => {
-              const catSlug = category?.toLowerCase().replace(/\s+/g, '-');
+            <a href="/blog" class="category-pill">All Articles</a>
+            {allCategories.map((cat) => {
+              const catSlug = cat?.toLowerCase().replace(/\s+/g, '-');
+              const isActive = cat === categoryName;
               return (
-                <a href={`/blog/category/${catSlug}`} class="category-pill">
-                  {category}
+                <a 
+                  href={`/blog/category/${catSlug}`} 
+                  class={`category-pill ${isActive ? 'active' : ''}`}
+                >
+                  {cat}
                 </a>
               );
             })}
@@ -57,7 +81,7 @@ const categories = [
         
         <!-- Blog Posts Grid -->
         <div class="posts-grid" id="posts-grid">
-          {allPosts.map(post => (
+          {posts.map((post: SanityPost) => (
             <div class="post-item">
               <BlogCard
                 slug={post.slug.current}
@@ -71,9 +95,9 @@ const categories = [
           ))}
         </div>
         
-        {allPosts.length === 0 && (
+        {posts.length === 0 && (
           <div class="no-posts">
-            <p>No articles found. Check back soon for new content!</p>
+            <p>No articles found for this category. Check back soon for new content!</p>
           </div>
         )}
       </div>
@@ -163,10 +187,6 @@ const categories = [
   
   .post-item {
     transition: opacity 0.3s;
-  }
-  
-  .post-item.hidden {
-    display: none;
   }
   
   .no-posts {

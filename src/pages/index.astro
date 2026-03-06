@@ -5,18 +5,23 @@ import Newsletter from '../components/Newsletter.astro';
 import { getPosts } from '../lib/queries';
 import { urlFor } from '../lib/sanity';
 
-// Get the 3 most recent blog posts
-const allPosts = await getPosts();
-console.log('Fetched posts from Sanity:', allPosts);
-const recentPosts = allPosts.slice(0, 3);
+import type { SanityPost } from '../lib/types';
 
-// Test if we're getting proper image URLs
-if (allPosts.length > 0 && allPosts[0].mainImage) {
-  console.log('Sample image URL:', urlFor(allPosts[0].mainImage).url());
+// Get the 3 most recent blog posts, with a fallback if the API fails
+let allPosts: SanityPost[] = [];
+try {
+  allPosts = await getPosts();
+} catch (error) {
+  console.error("Failed to fetch posts from Sanity:", error);
 }
+
+const recentPosts = allPosts.slice(0, 3);
 ---
 
-<BaseLayout title="Home - Your Trusted Medical Information Source">
+<BaseLayout 
+  title="Home - Your Trusted Medical Information Source"
+  image="/favicon.svg"
+>
   <div class="homepage">
     <!-- Hero Section -->
     <section class="hero">
@@ -33,12 +38,7 @@ if (allPosts.length > 0 && allPosts[0].mainImage) {
           </div>
         </div>
         <div class="hero-image">
-          <svg viewBox="0 0 400 300" fill="none">
-            <rect width="400" height="300" fill="#eff6ff"/>
-            <circle cx="200" cy="150" r="80" fill="#2563eb" opacity="0.1"/>
-            <circle cx="200" cy="150" r="60" fill="#2563eb" opacity="0.2"/>
-            <path d="M200 110v80M160 150h80" stroke="#2563eb" stroke-width="6" stroke-linecap="round"/>
-          </svg>
+          <img src="/hero_resus_room.png" alt="Emergency resuscitation room with medical team" class="hero-resus-img" />
         </div>
       </div>
     </section>
@@ -98,7 +98,7 @@ if (allPosts.length > 0 && allPosts[0].mainImage) {
             <BlogCard
               slug={post.slug.current}
               title={post.title}
-              description={post.excerpt}
+              description={post.excerpt || ''}
               pubDate={post.publishedAt ? new Date(post.publishedAt) : new Date()}
               category={post.categories?.[0]?.title || 'General'}
               image={post.mainImage ? urlFor(post.mainImage).width(400).url() : '/placeholder.jpg'}
@@ -138,7 +138,7 @@ if (allPosts.length > 0 && allPosts[0].mainImage) {
   
   /* Hero Section */
   .hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-purple) 100%);
     color: white;
     padding: 5rem 0;
   }
@@ -180,7 +180,7 @@ if (allPosts.length > 0 && allPosts[0].mainImage) {
   
   .btn-primary {
     background: white;
-    color: #667eea;
+    color: var(--brand-blue);
   }
   
   .btn-primary:hover {
@@ -205,9 +205,12 @@ if (allPosts.length > 0 && allPosts[0].mainImage) {
     align-items: center;
   }
   
-  .hero-image svg {
+  .hero-resus-img {
     max-width: 100%;
     height: auto;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    border: 4px solid rgba(255, 255, 255, 0.2);
   }
   
   /* Features Section */
@@ -267,7 +270,7 @@ if (allPosts.length > 0 && allPosts[0].mainImage) {
   }
   
   .view-all {
-    color: #2563eb;
+    color: var(--brand-blue);
     font-weight: 600;
     text-decoration: none;
   }
@@ -285,14 +288,14 @@ if (allPosts.length > 0 && allPosts[0].mainImage) {
   .no-posts {
     text-align: center;
     padding: 3rem 2rem;
-    color: #666;
+    color: var(--text-muted);
     font-size: 1.125rem;
   }
   
   /* CTA Section */
   .cta-section {
     padding: 5rem 0;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-purple) 100%);
     color: white;
   }
   

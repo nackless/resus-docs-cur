@@ -8,9 +8,42 @@ const formattedDate = frontmatter.pubDate.toLocaleDateString('en-US', {
   month: 'long',
   day: 'numeric'
 });
+
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "MedicalScholarlyArticle",
+  "headline": frontmatter.title,
+  "description": frontmatter.description,
+  "image": frontmatter.image ? [new URL(frontmatter.image, Astro.url)] : [],
+  "author": {
+    "@type": "Person",
+    "name": frontmatter.author
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "MedBlog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": new URL("/favicon.svg", Astro.url)
+    }
+  },
+  "datePublished": frontmatter.pubDate.toISOString(),
+  "dateModified": frontmatter.pubDate.toISOString(),
+  "about": {
+    "@type": "MedicalEntity",
+    "name": frontmatter.category
+  }
+};
 ---
 
-<BaseLayout title={frontmatter.title} description={frontmatter.description}>
+<BaseLayout 
+  title={frontmatter.title} 
+  description={frontmatter.description}
+  image={frontmatter.image}
+  type="article"
+>
+  <!-- Inject Schema.org JSON-LD -->
+  <script type="application/ld+json" set:html={JSON.stringify(schema)} />
   <article class="blog-post">
     <div class="container">
       <header class="post-header">
